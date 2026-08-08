@@ -1,0 +1,11 @@
+fastapi>=0.115.0
+uvicorn[standard]>=0.32.0
+websockets>=13.0
+alembic>=1.19.0
+asyncpg>=0.31.0
+bcrypt>=5.0.0
+pydantic-settings>=2.14.2
+sqlalchemy[asyncio]>=2.0.51
+sqlmodel
+resend[async]>=2.35.0
+pwdlib[argon2,bcrypt]>=0.3.0
