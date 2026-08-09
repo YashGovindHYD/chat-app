@@ -1,0 +1,22 @@
+info:
+  name: Send OTP TO EMAIL
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{url}}/auth/get-otp"
+  body:
+    type: json
+    data: |-
+      {
+        "email": "yashgovind123@gmail.com",
+        "name": "yash"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

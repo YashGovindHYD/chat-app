@@ -1,0 +1,31 @@
+info:
+  name: Verify User OTP
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{url}}/auth/verify-otp"
+  body:
+    type: json
+    data: |-
+      {
+        "otp_code":"1112",
+        "email":"yashgovind123@gmail.com"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        if (res.status === 200) {
+          bru.setGlobalEnvVar("access_token", res.body.access_token);
+          bru.setGlobalEnvVar("refresh_token", res.body.refresh_token);
+        }
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
