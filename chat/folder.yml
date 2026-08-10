@@ -1,0 +1,10 @@
+info:
+  name: chat
+  type: folder
+  seq: 3
+
+request:
+  auth: inherit
+  variables:
+    - name: url_ws
+      value: ws://127.0.0.1:8000

@@ -1,0 +1,9 @@
+name: chat-app
+variables:
+  - name: url
+    value: http://127.0.0.1:8000
+    description: ""
+  - secret: true
+    name: access_token
+  - secret: true
+    name: refresh_token

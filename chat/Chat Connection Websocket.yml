@@ -1,0 +1,24 @@
+info:
+  name: Chat Connection Websocket
+  type: websocket
+  seq: 1
+
+websocket:
+  url: "{{url_ws}}/chat/ws/1"
+  message:
+    - title: message 1
+      selected: false
+      message:
+        type: json
+        data: |
+          {
+            "user_id": "1",
+            "message": "Hey your message has been received bruh bruh blah blahhhhhhh"
+          }
+  auth:
+    type: bearer
+    token: "{{access_token}}"
+
+settings:
+  timeout: 0
+  keepAliveInterval: 0
