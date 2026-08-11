@@ -71,7 +71,7 @@ class UserResponse(SQLModel):
 
 # message response 
 class MessageResponse(SQLModel):
-    id:str
+    id:int
     content:str
     sender_id:str
     

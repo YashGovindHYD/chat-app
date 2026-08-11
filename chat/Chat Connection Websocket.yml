@@ -10,10 +10,10 @@ websocket:
       selected: false
       message:
         type: json
-        data: |
+        data: |-
           {
-            "user_id": "1",
-            "message": "Hey your message has been received bruh bruh blah blahhhhhhh"
+            "conversation_id":1,
+            "message":"HEY HOW ARE YOU ALL PEEPS SMILY :)))))"
           }
   auth:
     type: bearer

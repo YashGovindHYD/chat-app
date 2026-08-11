@@ -1,5 +1,12 @@
 from datetime import datetime, timedelta
-from fastapi import Depends, HTTPException, status, Request, WebSocket, WebSocketException
+from fastapi import (
+    Depends,
+    HTTPException,
+    status,
+    Request,
+    WebSocket,
+    WebSocketException,
+)
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from sqlalchemy import select
@@ -150,22 +157,21 @@ async def get_current_user_ws(
         code=status.WS_1008_POLICY_VIOLATION,
         reason="Could not validate credentials",
     )
-    
+
     token = websocket.headers["Authorization"]
-    
-    if token :
+
+    if token:
         token = token.split()[1]
-    
+
     if token is None:
         # fallback to cookies
         # access the cookie named 'access_token' in this case, you can change it as per your requirement (you need a way of storing tokens somewhere). If not found then raise an exception or return None  depending on
-        token =  websocket.cookies["access_token"] 
+        token = websocket.cookies["access_token"]
 
     if token is None:
         # fallback to query parameters.
         token = websocket.query_params["token"]
-    
-    
+
     # throw exception if still not found
     if token is None:
         raise websocket_exception
@@ -174,8 +180,8 @@ async def get_current_user_ws(
     if not token_data:
         raise websocket_exception
 
-    user = db.get(User,token_data.user_id)
+    user = await db.get(User, token_data.user_id)
     if not user:
         raise websocket_exception
 
-    return user 
+    return user
