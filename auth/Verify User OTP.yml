@@ -10,12 +10,15 @@ http:
     type: json
     data: |-
       {
-        "otp_code":"5891",
+        "otp_code":"3916",
         "email":"yashgovind123@gmail.com"
       }
   auth: inherit
 
 runtime:
+  variables:
+    - name: url
+      value: http://127.0.0.1:8000
   scripts:
     - type: after-response
       code: |-

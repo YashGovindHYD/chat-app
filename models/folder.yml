@@ -1,6 +1,4 @@
 info:
   name: models
   type: folder
-  seq: 10
-
-request: {}
+  seq: 11

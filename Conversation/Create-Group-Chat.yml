@@ -1,0 +1,29 @@
+info:
+  name: Create-Group-Chat
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{url}}/conversation/create-group"
+  body:
+    type: json
+    data: |
+      {
+        "name": "Going-to-zoo",
+        "member_id": [4, 5, 6]
+      }
+  auth:
+    type: bearer
+    token: "{{access_token}}"
+
+runtime:
+  variables:
+    - name: url
+      value: http://127.0.0.1:8000
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

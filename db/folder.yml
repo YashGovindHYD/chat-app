@@ -1,6 +1,4 @@
 info:
   name: db
   type: folder
-  seq: 9
-
-request: {}
+  seq: 10

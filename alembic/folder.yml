@@ -1,6 +1,4 @@
 info:
   name: alembic
   type: folder
-  seq: 7
-
-request: {}
+  seq: 8
