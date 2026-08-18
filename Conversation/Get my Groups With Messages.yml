@@ -1,0 +1,17 @@
+info:
+  name: Get my Groups With Messages
+  type: http
+  seq: 4
+
+http:
+  method: GET
+  url: "{{url}}/conversation/my-groups-with-messages"
+  auth:
+    type: bearer
+    token: "{{access_token}}"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
