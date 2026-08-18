@@ -3,6 +3,9 @@ variables:
   - name: url
     value: http://127.0.0.1:8000
     description: ""
+  - name: url_ws
+    value: ws://127.0.0.1:8000
+    description: ""
   - secret: true
     name: access_token
   - secret: true

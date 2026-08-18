@@ -8,10 +8,14 @@ http:
   url: "{{url}}/conversation/create-group"
   body:
     type: json
-    data: |
+    data: |-
       {
-        "name": "Going-to-zoo",
-        "member_id": [4, 5, 6]
+        "name": "Going-to-zoo-again",
+        "member_id": [
+          4,
+          5,
+          6
+        ]
       }
   auth:
     type: bearer

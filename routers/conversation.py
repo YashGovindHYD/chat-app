@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response, status
-from sqlalchemy import func, select
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
@@ -61,5 +61,38 @@ async def get_my_conversations(
     # get all conversation where user is the owner
     # join with conversation members to get the member details
     # join with users to get the member details
+    # # for every conversation, aggregate the member ids into an array
+    # group by conversation parameters to get unique conversations
+    # stmt = (
+    #     select(Conversation,func.array_agg(User.id).label("member_ids"))
+    #     .where(Conversation.owner==user.id)
+    #     .join(ConversationMember,ConversationMember.conversation_id==Conversation.id)
+    #     .join(User,User.id==ConversationMember.user_id)
+    #     .group_by(Conversation.id,Conversation.owner,Conversation.type)
+    #     .limit(limit)
+    # )
+    # result = await db.execute(stmt)
+    # conversations = result.all()
+    # return [
+    #     GroupChatCreateResponse(**conversation.model_dump(),members=member_ids)
+    #     for conversation,member_ids in conversations
+    # ]
+    #
+    #
+    stmt = (
+        select(Conversation)
+        .where(Conversation.owner==user.id)
+        .options(selectinload(Conversation.members))
+        .limit(limit)
+    )
+    result = await db.execute(stmt)
+    conversations = result.scalars().all()
+    return [
+        GroupChatCreateResponse(
+            **conversation.model_dump(),
+            members=[member.user_id for member in conversation.members],
+        )
+        for conversation in conversations
+    ]
 
-   pass
+# get all messages in conversation the user owns.
