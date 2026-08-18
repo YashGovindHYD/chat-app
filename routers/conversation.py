@@ -38,16 +38,19 @@ async def create_group_chat(
     await db.commit()
     await db.refresh(conversation)
 
-    for member_id in list(payload.member_id):
+    member_ids = {user.id, *payload.member_id}
+    for member_id in member_ids:
         member = ConversationMember(
-            role="member", conversation_id=conversation.id, user_id=member_id
+            role="owner" if member_id == user.id else "member",
+            conversation_id=conversation.id,
+            user_id=member_id,
         )
         db.add(member)
         await db.commit()
         await db.refresh(member)
 
     return GroupChatCreateResponse(
-        **conversation.model_dump(), members=list(payload.member_id)
+        **conversation.model_dump(), members=list(member_ids)
     )
 
 
