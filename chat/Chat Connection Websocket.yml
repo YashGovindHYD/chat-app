@@ -12,8 +12,8 @@ websocket:
         type: json
         data: |-
           {
-            "conversation_id":6,
-            "message":"noobs go to zoo suckers , HAHAHAHHA"
+            "conversation_id":7,
+            "message":"NU GOIN TO PARK GOT ITTTTTTTTT , *^*"
           }
   auth:
     type: bearer

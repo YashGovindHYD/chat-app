@@ -38,24 +38,13 @@ async def websocket_endpoint(
     current_user: User = Depends(get_current_user_ws),
     db: AsyncSession = Depends(get_db)
 ):
-    # only members of this conversation may connect and send messages
-    result = await db.execute(
-        select(ConversationMember).where(
-            ConversationMember.conversation_id == conversation_id,
-            ConversationMember.user_id == current_user.id,
-        )
-    )
-    if result.scalar_one_or_none() is None:
-        raise WebSocketException(
-            code=status.WS_1008_POLICY_VIOLATION,
-            reason="You are not a member of this conversation",
-        )
 
     # connect to websocket, grouped by conversation so all members of the conversation share a broadcast group
     # # get data from client
     # save message to database
     # # add a check to ensure the sender is a member of the conversation
     # broadcast message to all connected sockets in the conversation
+
     await manager.connect(websocket, conversation_id)
     print("Connected to Websocket on Server")
     try:
@@ -76,8 +65,8 @@ async def websocket_endpoint(
             stmt = (
                 select(ConversationMember)
                 .where(
-                    Conversation.user_id==current_user.id,
-                    Conversation.id == conversation_id,
+                    ConversationMember.user_id == current_user.id,
+                    ConversationMember.conversation_id == conversation_id,
                 )
             )
             rs = await db.scalars(stmt)
