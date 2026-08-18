@@ -4,7 +4,7 @@ info:
   seq: 1
 
 websocket:
-  url: "{{url_ws}}/chat/ws/5"
+  url: "{{url_ws}}/chat/ws/7"
   message:
     - title: message 1
       selected: false
@@ -12,8 +12,8 @@ websocket:
         type: json
         data: |-
           {
-            "conversation_id":7,
-            "message":"NU GOIN TO PARK GOT ITTTTTTTTT , *^*"
+            "conversation_id": 7,
+            "message": "NU GOIN TO PARK GOT ITTTTTTTTT , *^*"
           }
   auth:
     type: bearer
