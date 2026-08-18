@@ -1,22 +1,20 @@
-from models.models import GroupChatCreate
-from fastapi import APIRouter, Depends, HTTPException, status, Response, Request
-from sqlalchemy import select
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response, status
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
-from db.database import get_db
-from sqlalchemy import func
 
-from models.models import (
-    User,
-    Conversation,
-    Message,
-    ConversationMember,
-    MessageResponse,
-    GroupChatCreateResponse,
-)
 from config.config import get_settings
+from db.database import get_db
+from models.models import (
+    Conversation,
+    ConversationMember,
+    GroupChatCreate,
+    GroupChatCreateResponse,
+    Message,
+    MessageResponse,
+    User,
+)
 from utils.oauth2 import get_current_user
-from fastapi import Query
 
 settings = get_settings()
 router = APIRouter(prefix="/conversation")
@@ -61,4 +59,7 @@ async def get_my_conversations(
     user: User = Depends(get_current_user),
 ):
     # get all conversation where user is the owner
-   pass 
+    # join with conversation members to get the member details
+    # join with users to get the member details
+
+   pass
