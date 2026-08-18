@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response, status
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
@@ -10,6 +10,7 @@ from models.models import (
     ConversationMember,
     GroupChatCreate,
     GroupChatCreateResponse,
+    GroupWithMessagesResponse,
     Message,
     MessageResponse,
     User,
@@ -98,4 +99,68 @@ async def get_my_conversations(
         for conversation in conversations
     ]
 
-# get all messages in conversation the user owns.
+ # groups with messages for the current user
+@router.get("/my-groups-with-messages", response_model=list[GroupWithMessagesResponse])
+async def get_my_groups_with_messages(
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+    limit: int = 20,
+):
+    stmt = (
+        select(Conversation, func.array_agg(Message.content).label("messages"))
+        .join(Message, Conversation.id == Message.conversation_id)
+        .where(Message.user_id == user.id)
+        .group_by(Conversation.id)
+        .limit(limit)
+    )
+    # check if conversation member is part of conversation.
+    stmt_01 = (
+        select(ConversationMember)
+        .where(ConversationMember.conversation_id == Conversation.id,
+            ConversationMember.user_id == user.id)
+    )
+    rs = await db.scalars(stmt_01)
+    if not rs.first():
+        raise HTTPException(status_code=403, detail="Forbidden")
+    rs_01 = await db.execute(stmt)
+    groups_with_messages = rs_01.all()
+
+    result = []
+    for conversation, messages in groups_with_messages:
+
+        group = GroupWithMessagesResponse(
+            id=conversation.id,
+            name=conversation.name,
+            type=conversation.type,
+            owner=conversation.owner,
+            messages = messages
+        )
+        result.append(group)
+    return result
+
+
+# get all messages of a particular conversation
+@router.get("/{conversation_id}")
+async def get_conversation_messages(
+    conversation_id: int,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+    limit: int = 20,
+):
+    stmt = (
+        select(Message)
+        .where(Message.conversation_id == conversation_id)
+        .order_by(Message.created_at)
+        .limit(limit)
+    )
+    # check if conversation member is part of conversation.
+    stmt_01 = (
+        select(ConversationMember)
+        .where(ConversationMember.conversation_id == conversation_id,
+            ConversationMember.user_id == user.id)
+    )
+    rs = await db.scalars(stmt_01)
+    if not rs.first():
+        raise HTTPException(status_code=403, detail="Forbidden")
+    rs_01 = await db.scalars(stmt)
+    return rs_01.all()

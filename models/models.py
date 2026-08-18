@@ -105,7 +105,7 @@ class UserResponse(SQLModel):
 class MessageResponse(SQLModel):
     id: int
     content: str
-    sender_id: str
+    sender_id: int
 
 
 # otp request
@@ -137,3 +137,10 @@ class GroupChatCreateResponse(SQLModel):
     owner: int
     type: str
     members: list[int]
+
+class GroupWithMessagesResponse(SQLModel):
+    id: int
+    name: str
+    type: str
+    owner: int
+    messages: list[str]
